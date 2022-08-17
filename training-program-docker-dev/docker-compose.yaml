@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  tp-frontend:
+    container_name: tp-frontend
+    image: node:14-buster-slim
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3001/
+    volumes:
+    - "../training-program-frontend:/usr/src/app"
+    - "/usr/src/app/node_modules"
+    working_dir: "/usr/src/app"
+    command: ["npm", "run", "dev:smart"]
+    ports: ["3000:3000"]
+
+  tp-backend:
+    container_name: tp-backend
+    image: node:14-buster-slim
+    environment:
+      - DB_HOST=tp-database
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASS=postgres
+      - DB_NAME=postgres
+    volumes:
+    - "../training-program-backend:/usr/src/app"
+    - "/usr/src/app/node_modules"
+    working_dir: "/usr/src/app"
+    command: ["npm", "run", "dev:smart"]
+    ports: ["3001:3000"]
+
+  tp-database:
+    container_name: tp-database
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
