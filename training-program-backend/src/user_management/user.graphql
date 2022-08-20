@@ -1,7 +1,50 @@
 extend type Mutation {
-  createUser: User!
+  createUser(data: UserToCreateData!): CreateUserResponse!
 }
 
+extend type Query{
+  allUsers: AllUsersResponse!
+  loggedInUser(email: String!, password: String!): LoggedInUserResponse!
+}
+
+# Preguntar si encapsular email y password en un tipo esta por demas.
+# Migracion user > users
+
 type User {
-  id: String!
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  username: String!
+  salt: String!
+  password: String!
+}
+
+input UserToCreateData {
+  email: String!
+  firstName: String!
+  lastName: String!
+  username: String!
+  password: String!
+}
+
+type CreateUserResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+type AllUsersResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  users: [User!]!
+}
+
+type LoggedInUserResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: User
 }
