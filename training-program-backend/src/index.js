@@ -1,7 +1,6 @@
 import './set_working_directory'
-import express from 'express'
+import express, { json } from 'express'
 import { createServer } from 'http'
-import bodyParser from 'body-parser'
 import cors from 'cors'
 
 import createGraphQLServer from '~/src/service_providers/graphql/create_graphql_server'
@@ -18,7 +17,7 @@ app.use(cors({
   origin: corsOriginsRegex,
   credentials: true
 }))
-app.use(bodyParser.json())
+app.use(json())
 app.use(applyRequestNamespace)
 
 setupMiddleware(app)

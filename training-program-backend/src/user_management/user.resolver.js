@@ -1,4 +1,3 @@
-import { Query } from 'pg'
 import models from '~/src/service_providers/sequelize/models'
 
 export default {
@@ -14,6 +13,7 @@ export default {
         user
       }
     } catch (err) {
+      console.log(err)
       return {
         code: 1,
         success: false,
@@ -46,10 +46,7 @@ export default {
       }
     },
 
-    //loggedInUser: async (obj, args, context, info) => {
-    //  try {
-    //    const user = await models.user.findOne({where: {email: args.email, password: args.password}})
-    //  }
-    //}
+    loggedInUser: async (obj, args, context, info) => {
+    }
   }
 }

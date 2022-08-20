@@ -1,3 +1,5 @@
+import { randomBytes, scryptSync } from 'crypto'
+
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     id: {
@@ -36,15 +38,17 @@ export default (sequelize, DataTypes) => {
 
     password: {
       type: DataTypes.STRING,
-      defaultValue: '' /**<---- REMOVE/FIX**/, 
       allowNull: false
     }
   }, 
-
   {
     timestamps: false
-  }
-  )
+  })
+
+  User.beforeValidate((user, _) => {
+    user.salt = user.salt ?? randomBytes(16).toString('hex')
+    user.password = scryptSync(user.password, user.salt, 64).toString('hex')
+  })
 
   return User
 }
