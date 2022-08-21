@@ -12,7 +12,16 @@ export default (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: {
+        args: true,
+        msg: 'The email provided is already in use'
+      },
+      validate: {
+        isEmail: {
+          args: true,
+          msg: 'Must provide a valid email.'
+        }
+      }
     },
 
     firstName: {
@@ -27,7 +36,10 @@ export default (sequelize, DataTypes) => {
 
     username: {
       type: DataTypes.STRING,
-      unique: true,
+      unique: {
+        args: true,
+        msg: 'The username provided is already in use.'
+      },
       allowNull: false
     },
 

@@ -4,11 +4,11 @@ extend type Mutation {
 
 extend type Query{
   allUsers: AllUsersResponse!
-  loggedInUser(email: String!, password: String!): LoggedInUserResponse!
+  userByCredentials(email: String!, password: String!): UserByCredentialsResponse!
+  userById(id: ID!): UserByIDResponse!
 }
 
 # Preguntar si encapsular email y password en un tipo esta por demas.
-# Migracion user > users
 
 type User {
   id: ID!
@@ -42,7 +42,14 @@ type AllUsersResponse {
   users: [User!]!
 }
 
-type LoggedInUserResponse {
+type UserByCredentialsResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+type UserByIDResponse {
   code: Int!
   success: Boolean!
   message: String!

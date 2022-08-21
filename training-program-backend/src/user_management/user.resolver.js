@@ -1,4 +1,5 @@
 import models from '~/src/service_providers/sequelize/models'
+import { hashPassword, doHashesMatch } from '../utils/eval_credentials'
 
 export default {
   Mutation: {
@@ -10,7 +11,7 @@ export default {
         code: 0,
         success: true,
         message: `The user ${user.username} was successfully created.`,
-        user
+        user: user
       }
     } catch (err) {
       console.log(err)
@@ -40,13 +41,51 @@ export default {
         return {
           code: 1,
           success: false,
-          message: 'Could not retrieve all users.',
+          message: err.message,
           users: []
         }
       }
     },
 
-    loggedInUser: async (obj, args, context, info) => {
+    userByCredentials: async (obj, args, context, info) => {
+      const user = await models.user.findOne({where: {email: args.email}})
+      const hashedUserProvidedPassword = hashPassword(args.password, user?.salt)
+      if (doHashesMatch(user?.password, hashedUserProvidedPassword)) {
+        return {
+          code: 0,
+          success: true,
+          message: `The user retrieved is ${user.username}`,
+          user: user
+        }
+      }
+      
+      return {
+        code: 1,
+        success: false,
+        message: 'Provided password or email is invalid.',
+        user: null
+      }
+    },
+
+    userById: async (obj, args, context, info) => {
+      try {
+        const user = await models.user.findOne({where: {id: args.id}})
+        if (user) {
+          return {
+            code: 0,
+            success: true,
+            message: `The retrieved user is ${user.username}`,
+            user: user
+          }
+        }
+      } catch (err) {
+        return {
+          code: 1,
+          success: false,
+          message: err.message,
+          user: null        
+        }
+      }
     }
   }
 }
