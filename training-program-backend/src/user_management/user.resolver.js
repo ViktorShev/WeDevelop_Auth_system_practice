@@ -8,7 +8,7 @@ export default {
         const user = await models.user.create(args.data)
 
       return {
-        code: 0,
+        code: "USER_CREATE_SUCCESS",
         success: true,
         message: `The user ${user.username} was successfully created.`,
         user: user
@@ -16,7 +16,7 @@ export default {
     } catch (err) {
       console.log(err)
       return {
-        code: 1,
+        code: "USER_CREATE_FAIL",
         success: false,
         message: err.message,
         user: null
@@ -31,7 +31,7 @@ export default {
         const users = await models.user.findAll()
 
       return {
-        code: 0,
+        code: "USERS_FOUND",
         success: true,
         message: 'Retrieved all users successfully.',
         users: users
@@ -39,7 +39,7 @@ export default {
 
       } catch (err) {
         return {
-          code: 1,
+          code: "USERS_NOT_FOUND",
           success: false,
           message: err.message,
           users: []
@@ -52,7 +52,7 @@ export default {
       const hashedUserProvidedPassword = hashPassword(args.password, user?.salt)
       if (doHashesMatch(user?.password, hashedUserProvidedPassword)) {
         return {
-          code: 0,
+          code: "USER_FOUND",
           success: true,
           message: `The user retrieved is ${user.username}`,
           user: user
@@ -60,7 +60,7 @@ export default {
       }
       
       return {
-        code: 1,
+        code: "USER_NOT_FOUND",
         success: false,
         message: 'Provided password or email is invalid.',
         user: null
@@ -72,7 +72,7 @@ export default {
         const user = await models.user.findOne({where: {id: args.id}})
         if (user) {
           return {
-            code: 0,
+            code: "USER_FOUND",
             success: true,
             message: `The retrieved user is ${user.username}`,
             user: user
@@ -80,7 +80,7 @@ export default {
         }
       } catch (err) {
         return {
-          code: 1,
+          code: "USER_NOT_FOUND",
           success: false,
           message: err.message,
           user: null        
