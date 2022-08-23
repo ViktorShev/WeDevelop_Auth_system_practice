@@ -8,8 +8,6 @@ extend type Query{
   userById(id: ID!): UserByIDResponse!
 }
 
-# Preguntar si encapsular email y password en un tipo esta por demas.
-
 type User {
   id: ID!
   email: String!
